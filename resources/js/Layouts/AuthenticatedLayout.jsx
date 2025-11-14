@@ -62,6 +62,13 @@ export default function AuthenticatedLayout({ header, children }) {
         >
           Bill
         </NavLink>
+        <NavLink
+          href={route('ocr.demo')}
+          active={route().current('ocr.demo')}
+          className="text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2 transition"
+        >
+          OCR
+        </NavLink>
       </div>
 
       {/* Right: Actions + User */}
@@ -79,6 +86,12 @@ export default function AuthenticatedLayout({ header, children }) {
             className="inline-flex items-center rounded-lg bg-white/15 px-3 py-2 text-sm font-medium text-white hover:bg-white/25 focus:ring-2 focus:ring-white/40 transition duration-200"
           >
             📊 Overview
+          </Link>
+          <Link
+            href={route('ocr.demo')}
+            className="inline-flex items-center rounded-lg bg-white/15 px-3 py-2 text-sm font-medium text-white hover:bg-white/25 focus:ring-2 focus:ring-white/40 transition duration-200"
+          >
+            ✍️ OCR Demo
           </Link>
         </div>
 
@@ -150,6 +163,9 @@ export default function AuthenticatedLayout({ header, children }) {
         <ResponsiveNavLink href={route('bills.index')} className="text-white hover:bg-white/10 rounded-md">
           Bill
         </ResponsiveNavLink>
+          <ResponsiveNavLink href={route('ocr.demo')} className="text-white hover:bg-white/10 rounded-md">
+            OCR
+          </ResponsiveNavLink>
       </div>
       <div className="border-t border-indigo-500/50 pb-3 pt-4 px-4">
         {hasAuth ? (

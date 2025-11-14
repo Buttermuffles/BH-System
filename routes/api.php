@@ -16,3 +16,7 @@ Route::apiResource('rooms', RoomController::class)->only(['index', 'store', 'upd
 
 // Bill creation via controller (creates a Bill for the room's tenant if present).
 Route::post('/rooms/{room}/bills', [BillController::class, 'store']);
+
+// Chandra OCR endpoint: accepts multipart/form-data file upload under the key `file`.
+// Runs the Python `scripts/chandra_ocr.py` script and returns extracted text.
+Route::post('/ocr', [\App\Http\Controllers\ChandraController::class, 'upload']);

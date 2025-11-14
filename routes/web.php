@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\OcrController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -68,6 +69,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/map', function () {
         return Inertia::render('Map');
     })->name('map');
+
+    // POST endpoint for OCR uploads (supports both local and online methods)
+    Route::post('/ocr', [OcrController::class, 'upload'])->name('ocr.upload');
+
+// Demo OCR page for testing Chandra integration (visible to authenticated users).
+Route::get('/ocr-demo', function () {
+    return Inertia::render('OcrDemo');
+})->middleware('auth')->name('ocr.demo');
 });
 
 require __DIR__.'/auth.php';
