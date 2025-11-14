@@ -59,8 +59,13 @@ Upload File → Python Script → Tesseract Engine → Extract Text → Save Res
   - Disk: ~2-3 GB total
 
 ### Supported File Types
-- **Images**: PNG, JPG, JPEG, TIFF, BMP, GIF, WebP
-- **Documents**: PDF (converted to images internally)
+- **Images**: PNG, JPG, JPEG, TIFF, BMP, GIF, WebP (OCR)
+- **PDFs**: Multi-page PDF documents (OCR via pdf2image)
+- **Word**: .docx files (direct text extraction), .doc (requires conversion)
+- **Excel**: .xlsx, .xls files (direct text extraction from cells)
+- **PowerPoint**: .pptx files (direct text extraction from slides), .ppt (requires conversion)
+- **Text Files**: .txt, .csv, .rtf (direct reading)
+- **OpenDocument**: .odt, .ods, .odp (requires conversion to standard formats)
 
 ### Supported Languages
 - English (default): ✓

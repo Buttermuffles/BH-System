@@ -5,9 +5,10 @@
 ### 1. **Local OCR (Tesseract)**
 - ✅ Python script: `scripts/local_ocr.py`
 - ✅ Installed: Python 3.12, Tesseract OCR 5.4
-- ✅ Dependencies: pytesseract, Pillow, pdf2image, requests, python-dotenv
+- ✅ Dependencies: pytesseract, Pillow, pdf2image, python-docx, openpyxl, xlrd, python-pptx, striprtf, requests, python-dotenv
 - ✅ Configured `.env` with paths to Python and Tesseract
 - ✅ **Status**: Ready to use (tested with sample image - extracted "House Rules")
+- ✅ **Supported Formats**: PDF, Images, Word (.docx), Excel (.xlsx, .xls), PowerPoint (.pptx), Text (.txt, .csv, .rtf)
 
 ### 2. **Online OCR (Cloud-Ready)**
 - ✅ Backend support: `app/Http/Controllers/OcrController.php`
@@ -19,8 +20,8 @@
 - ✅ New component: `resources/js/Components/OcrUpload.jsx`
 - ✅ Features:
   - Radio button to select Local or Online OCR
-  - File upload with drag-and-drop ready
-  - Image/PDF preview
+  - File upload supporting: PDF, Word, Excel, PowerPoint, Images, Text files, CSV, RTF
+  - File type detection with appropriate icons/previews
   - Side-by-side display: Original document + Extracted text
   - Error handling and loading state
   - CSRF token protection

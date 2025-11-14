@@ -23,17 +23,35 @@ winget install Python.Python.3.12
 winget install UB-Mannheim.TesseractOCR
 ```
 
-**3. Install Python Dependencies**
+**3. Install Poppler (Required for PDF Processing)**
+```powershell
+winget install poppler
+```
+
+**Note:** If poppler is not in PATH, you can set `POPPLER_PATH` in `.env`:
+```env
+POPPLER_PATH="C:\Program Files\poppler\Library\bin"
+```
+
+**4. Install Python Dependencies**
 ```powershell
 cd "c:\Users\johnx\OneDrive\Documents\REACT FOLDER\BH-System"
 $pythonPath = "C:\Users\johnx\AppData\Local\Programs\Python\Python312\python.exe"
 & $pythonPath -m pip install -r scripts/requirements.txt
 ```
 
-**4. Configure .env**
+**Note:** The requirements now include libraries for Word, Excel, PowerPoint, and other document formats:
+- `python-docx` - Word documents (.docx)
+- `openpyxl` - Excel files (.xlsx)
+- `xlrd` - Old Excel format (.xls)
+- `python-pptx` - PowerPoint (.pptx)
+- `striprtf` - RTF files
+
+**5. Configure .env**
 ```env
 PYTHON_CMD="C:\Users\johnx\AppData\Local\Programs\Python\Python312\python.exe"
 TESSERACT_CMD="C:\Program Files\Tesseract-OCR\tesseract.exe"
+POPPLER_PATH="C:\Program Files\poppler\Library\bin"  # Optional: if poppler not in PATH
 ```
 
 #### Linux/Mac Setup
@@ -47,23 +65,47 @@ sudo apt-get install tesseract-ocr
 brew install tesseract
 ```
 
-**2. Install Python Dependencies**
+**2. Install Poppler (Required for PDF Processing)**
+```bash
+# Ubuntu/Debian
+sudo apt-get install poppler-utils
+
+# macOS
+brew install poppler
+```
+
+**3. Install Python Dependencies**
 ```bash
 python3 -m pip install -r scripts/requirements.txt
 ```
 
-**3. Configure .env**
+**Note:** This installs libraries for Word, Excel, PowerPoint, and other document formats.
+
+**4. Configure .env**
 ```env
 PYTHON_CMD=python3
 TESSERACT_CMD=/usr/bin/tesseract  # or /usr/local/bin/tesseract on Mac
+# Poppler usually in PATH on Linux/Mac, no need to set POPPLER_PATH
 ```
 
 ### How It Works
-1. User uploads PDF/image → Laravel controller
+1. User uploads document (PDF, Word, Excel, images, etc.) → Laravel controller
 2. Controller calls `scripts/local_ocr.py` with file path
-3. Python script uses pytesseract + Tesseract engine
+3. Python script:
+   - For images/PDFs: Uses pytesseract + Tesseract engine (OCR)
+   - For Word/Excel/PowerPoint: Extracts text directly from file structure
+   - For text files: Reads content directly
 4. Extracts text and saves to `storage/app/ocr_output/`
 5. Returns text to React component for display
+
+### Supported File Types
+- **Images**: PNG, JPG, JPEG, TIFF, BMP, GIF, WebP (OCR)
+- **PDFs**: Multi-page PDF documents (OCR)
+- **Word**: .docx files (direct extraction), .doc (requires conversion)
+- **Excel**: .xlsx, .xls files (direct extraction)
+- **PowerPoint**: .pptx files (direct extraction), .ppt (requires conversion)
+- **Text**: .txt, .csv, .rtf files (direct reading)
+- **OpenDocument**: .odt, .ods, .odp (requires conversion to standard formats)
 
 ### Files
 - `scripts/local_ocr.py` - Python OCR script
@@ -172,6 +214,12 @@ cat storage/app/ocr_logs/local_ocr_*.log
 - Windows: Install with `winget install UB-Mannheim.TesseractOCR`
 - Linux: `sudo apt-get install tesseract-ocr`
 - Ensure Tesseract is in PATH or set `TESSERACT_CMD`
+
+### "Poppler not found" or "Unable to get page count"
+- Windows: Install with `winget install poppler`
+- Linux: `sudo apt-get install poppler-utils`
+- macOS: `brew install poppler`
+- If not in PATH, set `POPPLER_PATH` in `.env` to the poppler bin directory
 
 ### Online OCR fails with "API key error"
 - Verify `CHANDRA_API_KEY` in `.env`

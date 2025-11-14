@@ -15,7 +15,7 @@ class OcrController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:pdf,png,jpg,jpeg,tiff,bmp,gif,webp',
+            'file' => 'required|file|mimes:pdf,png,jpg,jpeg,tiff,bmp,gif,webp,doc,docx,xls,xlsx,ppt,pptx,txt,rtf,odt,ods,odp,csv',
             'method' => 'sometimes|in:local,online',  // local or online OCR
         ]);
 
