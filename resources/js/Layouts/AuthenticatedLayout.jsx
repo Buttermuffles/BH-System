@@ -48,26 +48,20 @@ export default function AuthenticatedLayout({ header, children }) {
         >
           Tenant
         </NavLink>
-        <NavLink
-          href={route('rooms.index')}
-          active={route().current('rooms.index')}
-          className="text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2 transition"
-        >
-          Room
-        </NavLink>
-        <NavLink
-          href={route('bills.index')}
-          active={route().current('bills.index')}
-          className="text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2 transition"
-        >
-          Bill
-        </NavLink>
+
         <NavLink
           href={route('ocr.demo')}
           active={route().current('ocr.demo')}
           className="text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2 transition"
         >
           OCR
+        </NavLink>
+        <NavLink
+          href={route('electrical.bill.receipt')}
+          active={route().current('electrical.bill.receipt')}
+          className="text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2 transition"
+        >
+          E-Bill
         </NavLink>
       </div>
 
@@ -86,12 +80,6 @@ export default function AuthenticatedLayout({ header, children }) {
             className="inline-flex items-center rounded-lg bg-white/15 px-3 py-2 text-sm font-medium text-white hover:bg-white/25 focus:ring-2 focus:ring-white/40 transition duration-200"
           >
             📊 Overview
-          </Link>
-          <Link
-            href={route('ocr.demo')}
-            className="inline-flex items-center rounded-lg bg-white/15 px-3 py-2 text-sm font-medium text-white hover:bg-white/25 focus:ring-2 focus:ring-white/40 transition duration-200"
-          >
-            ✍️ OCR Demo
           </Link>
         </div>
 
@@ -165,6 +153,9 @@ export default function AuthenticatedLayout({ header, children }) {
         </ResponsiveNavLink>
           <ResponsiveNavLink href={route('ocr.demo')} className="text-white hover:bg-white/10 rounded-md">
             OCR
+          </ResponsiveNavLink>
+          <ResponsiveNavLink href={route('electrical.bill.receipt')} className="text-white hover:bg-white/10 rounded-md">
+            Electrical Bill
           </ResponsiveNavLink>
       </div>
       <div className="border-t border-indigo-500/50 pb-3 pt-4 px-4">

@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Print styles for electrical bill receipt */
+@media print {
+    /* Hide everything except the receipt */
+    body * {
+        visibility: hidden;
+    }
+    
+    /* Show only the receipt content */
+    #receipt, #receipt * {
+        visibility: visible;
+    }
+    
+    /* Position receipt at top of page */
+    #receipt {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        margin: 0;
+        padding: 20px;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    
+    /* Ensure proper text colors for print */
+    #receipt * {
+        color: #000 !important;
+    }
+    
+    /* Remove background colors for print */
+    #receipt .bg-gray-50, 
+    #receipt .bg-blue-50, 
+    #receipt .bg-white {
+        background: white !important;
+    }
+    
+    /* Ensure borders are visible in print */
+    #receipt .border-gray-300,
+    #receipt .border-t {
+        border-color: #000 !important;
+    }
+}

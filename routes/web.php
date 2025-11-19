@@ -77,6 +77,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/ocr-demo', function () {
     return Inertia::render('OcrDemo');
 })->middleware('auth')->name('ocr.demo');
+
+    // Electrical Bill Receipt Calculator (no database)
+    Route::get('/electrical-bill-receipt', function () {
+        return Inertia::render('ElectricalBillReceipt');
+    })->name('electrical.bill.receipt');
 });
 
 require __DIR__.'/auth.php';
