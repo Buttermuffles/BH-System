@@ -1,5 +1,6 @@
-import { Head } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
+// NOTE: Removed Inertia `Head` here because this page can be mounted as a standalone SPA
+// and the Inertia context is not available. We set document.title directly instead.
 import { toast } from 'sonner';
 
 export default function ElectricalBillReceiptPublic() {
@@ -218,10 +219,13 @@ export default function ElectricalBillReceiptPublic() {
         calculatedBills.forEach(bill => previewItems.push({ bill, copy: c + 1 }));
     }
 
+    useEffect(() => {
+        document.title = 'Electrical Bill Receipt Calculator';
+    }, []);
+
     return (
         <>
-            <Head title="Electrical Bill Receipt Calculator" />
-
+            
             <div className="py-6 print:hidden">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="mb-8">
