@@ -265,7 +265,6 @@ export default function ElectricalBillReceipt() {
         };
 
         // For reliability across environments, try popup printing first then fall back to in-page printing
-        const pageLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
 
         const openInPagePrint = () => {
             const existing = document.getElementById('receipt-print-modal');
