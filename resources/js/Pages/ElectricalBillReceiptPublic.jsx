@@ -226,7 +226,8 @@ export default function ElectricalBillReceiptPublic() {
         printWindow.document.close();
         printWindow.focus();
 
-        setTimeout(() => {
+        const triggerPrint = () => {
+            try { printWindow.focus(); } catch (e) {}
             try {
                 printWindow.print();
             } catch (e) {
@@ -234,7 +235,15 @@ export default function ElectricalBillReceiptPublic() {
             }
             try { printWindow.addEventListener('afterprint', () => { try { printWindow.close(); } catch (e) {} }); } catch (e) {}
             setTimeout(() => { try { printWindow.close(); } catch (e) {} }, 2000);
-        }, 500);
+        };
+
+        // Prefer waiting for load, but fallback to timed trigger
+        if (printWindow.document.readyState === 'complete') {
+            setTimeout(triggerPrint, 50);
+        } else {
+            printWindow.addEventListener('load', () => setTimeout(triggerPrint, 50));
+            setTimeout(triggerPrint, 1200);
+        }
     };
 
     const formatCurrency = (amount) => {
