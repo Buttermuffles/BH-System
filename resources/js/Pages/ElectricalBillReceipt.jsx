@@ -264,27 +264,55 @@ export default function ElectricalBillReceipt() {
             }, 2000);
         };
 
-        (async () => {
-            let cssText = '';
+        // For reliability across environments, try popup printing first then fall back to in-page printing
+        const pageLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
+
+        const openInPagePrint = () => {
+            const existing = document.getElementById('receipt-print-modal');
+            if (existing) existing.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'receipt-print-modal';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.zIndex = '999999';
+            modal.style.background = 'transparent';
+            modal.style.pointerEvents = 'none';
+            modal.innerHTML = `<div id="receipt">${bodyHtml}</div>`;
+            document.body.appendChild(modal);
+
+            const cleanup = () => { try { modal.remove(); } catch (e) {} };
+            const trigger = () => { try { window.focus(); } catch (e) {} try { window.print(); } catch (e) { console.error('Print failed', e); } };
+            const onAfter = () => { cleanup(); window.removeEventListener('afterprint', onAfter); };
+            window.addEventListener('afterprint', onAfter);
+            setTimeout(() => setTimeout(trigger, 50), 50);
+        };
+
+        try {
+            let popupSucceeded = false;
             try {
-                const responses = await Promise.all(pageLinks.map(h => fetch(h).then(r => r.text()).catch(() => '')));
-                cssText = responses.join('\n');
-            } catch (e) { cssText = ''; }
-
-            const cssTag = cssText ? `<style>${cssText}</style>` : pageLinks.map(href => `<link rel="stylesheet" href="${href}">`).join('\n');
-
-            printWindow.document.open();
-            printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print Receipts</title>${cssTag}${styles}</head><body>${bodyHtml}</body></html>`);
-            printWindow.document.close();
-            printWindow.focus();
-
-            if (printWindow.document.readyState === 'complete') {
-                setTimeout(triggerPrint, 50);
-            } else {
-                printWindow.addEventListener('load', () => setTimeout(triggerPrint, 50));
-                setTimeout(triggerPrint, 1200);
-            }
-        })();
+                const _window = window.open('', '_blank', 'width=900,height=700');
+                if (_window) {
+                    popupSucceeded = true;
+                    (async () => {
+                        let cssText = '';
+                        try { const responses = await Promise.all(pageLinks.map(h => fetch(h).then(r => r.text()).catch(() => ''))); cssText = responses.join('\n'); } catch (e) { cssText = ''; }
+                        const cssTag = cssText ? `<style>${cssText}</style>` : pageLinks.map(href => `<link rel="stylesheet" href="${href}">`).join('\n');
+                        _window.document.open();
+                        _window.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print Receipts</title>${cssTag}${styles}</head><body>${bodyHtml}</body></html>`);
+                        _window.document.close();
+                        _window.focus();
+                        if (_window.document.readyState === 'complete') setTimeout(() => _window.print(), 50);
+                        else _window.addEventListener('load', () => setTimeout(() => _window.print(), 50));
+                        try { _window.addEventListener('afterprint', () => { try { _window.close(); } catch (e) {} }); } catch (e) {}
+                    })();
+                }
+            } catch (e) { popupSucceeded = false; }
+            if (!popupSucceeded) openInPagePrint();
+        } catch (e) { openInPagePrint(); }
     };
 
     const formatCurrency = (amount) => {
