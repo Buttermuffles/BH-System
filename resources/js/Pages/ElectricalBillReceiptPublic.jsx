@@ -268,7 +268,7 @@ export default function ElectricalBillReceiptPublic() {
             modal.style.pointerEvents = 'none';
 
             // Insert the #receipt element expected by print CSS, including inline styles
-            const containerHtml = headHtml + `<div id="receipt">${bodyHtml}</div>`;
+            const containerHtml = styles + `<div id="receipt">${bodyHtml}</div>`;
             const range = document.createRange();
             range.selectNode(document.body);
             const frag = range.createContextualFragment(containerHtml);
