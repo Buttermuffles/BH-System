@@ -169,12 +169,7 @@ export default function ElectricalBillReceiptPublic() {
             return;
         }
 
-        const printWindow = window.open('', '_blank', 'width=900,height=700');
-        if (!printWindow) {
-            toast.error('Popup blocked. Please allow popups for this site to print receipts.');
-            return;
-        }
-
+        // Build the inline styles and HTML for the in-page print modal
         const styles = `
             <style>
                 /* Ensure we only show the receipt area when printing */
@@ -236,20 +231,6 @@ export default function ElectricalBillReceiptPublic() {
         });
         bodyHtml += '</div>';
 
-        // Copy current page stylesheet links into the print window so Tailwind styles apply
-        const pageLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
-
-        const triggerPrint = () => {
-            try { printWindow.focus(); } catch (e) {}
-            try {
-                printWindow.print();
-            } catch (e) {
-                console.error('Print failed', e);
-            }
-            try { printWindow.addEventListener('afterprint', () => { try { printWindow.close(); } catch (e) {} }); } catch (e) {}
-            setTimeout(() => { try { printWindow.close(); } catch (e) {} }, 2000);
-        };
-
         // For reliability across environments (popups and CSP), render the receipt into an in-page print container
         const openInPagePrint = () => {
             // Clean any existing print container
@@ -289,40 +270,8 @@ export default function ElectricalBillReceiptPublic() {
             // Give browser a tick to render the injected DOM before printing
             setTimeout(() => setTimeout(trigger, 50), 50);
         };
-
-        // Try popup approach first (for backwards compatibility); if popup is blocked or environment unreliable, fall back to in-page print
-        try {
-            // attempt popup-based print; if it fails we'll use in-page
-            let popupSucceeded = false;
-            try {
-                const _window = window.open('', '_blank', 'width=900,height=700');
-                if (_window) {
-                    popupSucceeded = true;
-                    (async () => {
-                        let cssText = '';
-                        try {
-                            const responses = await Promise.all(pageLinks.map(h => fetch(h).then(r => r.text()).catch(() => '')));
-                            cssText = responses.join('\n');
-                        } catch (e) { cssText = ''; }
-                        const cssTag = cssText ? `<style>${cssText}</style>` : pageLinks.map(href => `<link rel="stylesheet" href="${href}">`).join('\n');
-                        _window.document.open();
-                        _window.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print Receipts</title>${cssTag}${styles}</head><body>${bodyHtml}</body></html>`);
-                        _window.document.close();
-                        _window.focus();
-                        // wait for load then print
-                        if (_window.document.readyState === 'complete') setTimeout(() => _window.print(), 50);
-                        else _window.addEventListener('load', () => setTimeout(() => _window.print(), 50));
-                        // cleanup after print
-                        try { _window.addEventListener('afterprint', () => { try { _window.close(); } catch (e) {} }); } catch (e) {}
-                    })();
-                }
-            } catch (e) { popupSucceeded = false; }
-
-            if (!popupSucceeded) openInPagePrint();
-        } catch (e) {
-            // Ensure fallback
-            openInPagePrint();
-        }
+        // Always use in-page print modal (more reliable than popup).
+        openInPagePrint();
     };
 
     const formatCurrency = (amount) => {

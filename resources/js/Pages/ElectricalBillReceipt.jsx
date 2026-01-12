@@ -171,12 +171,7 @@ export default function ElectricalBillReceipt() {
             return;
         }
 
-        const printWindow = window.open('', '_blank', 'width=900,height=700');
-        if (!printWindow) {
-            toast.error('Popup blocked. Please allow popups for this site to print receipts.');
-            return;
-        }
-
+        // Build inline styles and HTML for in-page print modal
         const styles = `
             <style>
                 /* Ensure we only show the receipt area when printing */
@@ -239,33 +234,7 @@ export default function ElectricalBillReceipt() {
         });
         bodyHtml += '</div>';
 
-        // Copy current page stylesheet links into the print window so Tailwind styles apply
-        const pageLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
-
-        const triggerPrint = () => {
-            try { printWindow.focus(); } catch (e) {}
-            try {
-                printWindow.print();
-            } catch (e) {
-                console.error('Print failed', e);
-            }
-
-            try {
-                printWindow.addEventListener('afterprint', () => {
-                    try { printWindow.close(); } catch (e) { /* ignore */ }
-                });
-            } catch (e) {
-                // ignore
-            }
-
-            // Fallback: close the print window after 2 seconds
-            setTimeout(() => {
-                try { printWindow.close(); } catch (e) { /* ignore */ }
-            }, 2000);
-        };
-
-        // For reliability across environments, try popup printing first then fall back to in-page printing
-
+        // For reliability across environments, render an in-page print container
         const openInPagePrint = () => {
             const existing = document.getElementById('receipt-print-modal');
             if (existing) existing.remove();
@@ -294,28 +263,8 @@ export default function ElectricalBillReceipt() {
             setTimeout(() => setTimeout(trigger, 50), 50);
         };
 
-        try {
-            let popupSucceeded = false;
-            try {
-                const _window = window.open('', '_blank', 'width=900,height=700');
-                if (_window) {
-                    popupSucceeded = true;
-                    (async () => {
-                        let cssText = '';
-                        try { const responses = await Promise.all(pageLinks.map(h => fetch(h).then(r => r.text()).catch(() => ''))); cssText = responses.join('\n'); } catch (e) { cssText = ''; }
-                        const cssTag = cssText ? `<style>${cssText}</style>` : pageLinks.map(href => `<link rel="stylesheet" href="${href}">`).join('\n');
-                        _window.document.open();
-                        _window.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print Receipts</title>${cssTag}${styles}</head><body>${bodyHtml}</body></html>`);
-                        _window.document.close();
-                        _window.focus();
-                        if (_window.document.readyState === 'complete') setTimeout(() => _window.print(), 50);
-                        else _window.addEventListener('load', () => setTimeout(() => _window.print(), 50));
-                        try { _window.addEventListener('afterprint', () => { try { _window.close(); } catch (e) {} }); } catch (e) {}
-                    })();
-                }
-            } catch (e) { popupSucceeded = false; }
-            if (!popupSucceeded) openInPagePrint();
-        } catch (e) { openInPagePrint(); }
+        // Always use in-page print modal (more reliable)
+        openInPagePrint();
     };
 
     const formatCurrency = (amount) => {
