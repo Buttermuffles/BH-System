@@ -1,5 +1,9 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const manifestPath = path.resolve(__dirname, '..', 'public', 'build', 'manifest.json');
 const outPath = path.resolve(__dirname, '..', 'public', 'index.html');
@@ -12,10 +16,13 @@ function main(){
 
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
-  // Look for the spa entry (spa-electrical.js)
-  const entryKey = Object.keys(manifest).find(k => k.includes('spa-electrical.js'));
+  // Look for the spa entry (spa-electrical.jsx) or fallback to app.jsx
+  let entryKey = Object.keys(manifest).find(k => k.includes('spa-electrical.jsx'));
+  if (!entryKey) {
+    entryKey = Object.keys(manifest).find(k => k.includes('app.jsx'));
+  }
   if (!entryKey){
-    console.error('spa entry not found in manifest');
+    console.error('No entry found in manifest');
     process.exit(1);
   }
 
