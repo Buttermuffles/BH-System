@@ -223,12 +223,6 @@ export default function ElectricalBillReceiptPublic() {
 
         // Copy current page stylesheet links into the print window so Tailwind styles apply
         const pageLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
-        const linkTags = pageLinks.map(href => `<link rel="stylesheet" href="${href}">`).join('\n');
-
-        printWindow.document.open();
-        printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print Receipts</title> ${linkTags} ${styles}</head><body>${bodyHtml}</body></html>`);
-        printWindow.document.close();
-        printWindow.focus();
 
         const triggerPrint = () => {
             try { printWindow.focus(); } catch (e) {}
@@ -241,13 +235,29 @@ export default function ElectricalBillReceiptPublic() {
             setTimeout(() => { try { printWindow.close(); } catch (e) {} }, 2000);
         };
 
-        // Prefer waiting for load, but fallback to timed trigger
-        if (printWindow.document.readyState === 'complete') {
-            setTimeout(triggerPrint, 50);
-        } else {
-            printWindow.addEventListener('load', () => setTimeout(triggerPrint, 50));
-            setTimeout(triggerPrint, 1200);
-        }
+        (async () => {
+            let cssText = '';
+            try {
+                const responses = await Promise.all(pageLinks.map(h => fetch(h).then(r => r.text()).catch(() => '')));
+                cssText = responses.join('\n');
+            } catch (e) {
+                cssText = '';
+            }
+
+            const cssTag = cssText ? `<style>${cssText}</style>` : pageLinks.map(href => `<link rel="stylesheet" href="${href}">`).join('\n');
+
+            printWindow.document.open();
+            printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print Receipts</title>${cssTag}${styles}</head><body>${bodyHtml}</body></html>`);
+            printWindow.document.close();
+            printWindow.focus();
+
+            if (printWindow.document.readyState === 'complete') {
+                setTimeout(triggerPrint, 50);
+            } else {
+                printWindow.addEventListener('load', () => setTimeout(triggerPrint, 50));
+                setTimeout(triggerPrint, 1200);
+            }
+        })();
     };
 
     const formatCurrency = (amount) => {
