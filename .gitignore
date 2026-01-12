@@ -13,12 +13,16 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
 /public/hot
 /public/storage
+# Note: `public/build` contains built Vite assets. Kept out of git in development, but we now include it for Vercel static deploys.
+# Remove the comment and add `/public/build` back here if you want to ignore it again.
 /storage/*.key
 /storage/pail
 /vendor
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+.vercel
+.env*.local
