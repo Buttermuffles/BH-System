@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 // NOTE: Removed Inertia `Head` here because this page can be mounted as a standalone SPA
 // and the Inertia context is not available. We set document.title directly instead.
+import PublicAuthenticatedLayout from '@/Layouts/PublicAuthenticatedLayout';
 import { toast } from 'sonner';
 
 export default function ElectricalBillReceiptPublic() {
@@ -224,8 +225,8 @@ export default function ElectricalBillReceiptPublic() {
     }, []);
 
     return (
-        <>
-            
+        <PublicAuthenticatedLayout header="Electrical Bill Receipt Calculator">
+
             <div className="py-6 print:hidden">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="mb-8">
@@ -483,6 +484,6 @@ export default function ElectricalBillReceiptPublic() {
                     ))}
                 </div>
             </div>
-        </>
+        </PublicAuthenticatedLayout>
     );
 }
