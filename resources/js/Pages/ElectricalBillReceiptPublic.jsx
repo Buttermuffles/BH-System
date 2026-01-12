@@ -175,9 +175,38 @@ export default function ElectricalBillReceiptPublic() {
             return;
         }
 
-        const styles = `...`; // keep inline styles minimal here
+        const styles = `
+            <style>
+                /* Ensure we only show the receipt area when printing */
+                @media print {
+                    body * { visibility: hidden; }
+                    #receipt, #receipt * { visibility: visible; }
+                    #receipt { position: absolute; left: 0; top: 0; width: 100%; background: #fff; margin: 0; padding: 6px; box-shadow: none; }
+                    @page { margin: 6mm; size: auto; }
+                }
 
-        let bodyHtml = `<div class="grid ${compactFit ? 'compact' : ''}">`;
+                /* Default rendering styles for the print window */
+                body { font-family: Arial, Helvetica, sans-serif; color: #000; margin: 0; padding: 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                .grid { display: grid; ${compactFit ? 'grid-template-columns: repeat(3, 1fr);' : 'grid-template-columns: repeat(2, 1fr);'} gap: 10px; }
+                .card { border: 1px solid #111; padding: 8px; border-radius: 6px; background: #fff; box-sizing: border-box; page-break-inside: avoid; break-inside: avoid-column; -webkit-print-color-adjust: exact; }
+                .header { text-align: center; border-bottom: 1px solid #111; padding-bottom: 6px; margin-bottom: 6px; font-weight: 700; font-size:12px; }
+                .row { display:flex; justify-content:space-between; font-size:12px; margin:3px 0; }
+                .total { font-weight:800; font-size:14px; margin-top:8px; display:flex; justify-content:space-between; }
+                .copy-label { font-size:10px; text-align:right; color:#333; }
+                /* color helpers */
+                .prev { color: #6b7280; } /* gray */
+                .curr { color: #1e40af; font-weight:700; } /* blue */
+                .consumption { color: #3730a3; font-weight:800; } /* indigo */
+                .rate { color: #16a34a; font-weight:700; } /* green */
+                .total-amt { color: #b91c1c; font-weight:900; font-size:15px; } /* red */
+                /* compact fit adjustments */
+                .compact .card { padding:6px; }
+                .compact .row { font-size:10px; }
+                .compact .header { font-size:11px; }
+            </style>
+        `;
+
+        let bodyHtml = `<div id="receipt"><div class="grid ${compactFit ? 'compact' : ''}">`
         calculatedBills.forEach((bill) => {
             const name = escapeHtml(bill.name || '');
             const prev = isNaN(parseFloat(bill.previous)) ? '' : parseFloat(bill.previous).toLocaleString();
@@ -190,7 +219,7 @@ export default function ElectricalBillReceiptPublic() {
                 bodyHtml += `...`;
             }
         });
-        bodyHtml += '</div>';
+        bodyHtml += '</div></div>';
 
         printWindow.document.open();
         printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print Receipts</title>${styles}</head><body>${bodyHtml}</body></html>`);
