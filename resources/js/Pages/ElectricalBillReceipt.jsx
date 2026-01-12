@@ -281,7 +281,11 @@ export default function ElectricalBillReceipt() {
             modal.style.zIndex = '999999';
             modal.style.background = 'transparent';
             modal.style.pointerEvents = 'none';
-            modal.innerHTML = `<div id="receipt">${bodyHtml}</div>`;
+            const containerHtml = `<div id="receipt">${bodyHtml}</div>`;
+            const range = document.createRange();
+            range.selectNode(document.body);
+            const frag = range.createContextualFragment(containerHtml);
+            modal.appendChild(frag);
             document.body.appendChild(modal);
 
             const cleanup = () => { try { modal.remove(); } catch (e) {} };
