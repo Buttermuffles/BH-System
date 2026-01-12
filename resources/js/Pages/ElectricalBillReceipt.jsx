@@ -280,7 +280,7 @@ export default function ElectricalBillReceipt() {
             modal.style.zIndex = '999999';
             modal.style.background = 'transparent';
             modal.style.pointerEvents = 'none';
-            const containerHtml = `<div id="receipt">${bodyHtml}</div>`;
+            const containerHtml = headHtml + `<div id="receipt">${bodyHtml}</div>`;
             const range = document.createRange();
             range.selectNode(document.body);
             const frag = range.createContextualFragment(containerHtml);

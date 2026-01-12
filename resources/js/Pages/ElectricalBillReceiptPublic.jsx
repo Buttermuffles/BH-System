@@ -206,7 +206,7 @@ export default function ElectricalBillReceiptPublic() {
             </style>
         `;
 
-        let bodyHtml = `<div id="receipt"><div class="grid ${compactFit ? 'compact' : ''}">`
+        let bodyHtml = `<div class="grid ${compactFit ? 'compact' : ''}">`;
         calculatedBills.forEach((bill) => {
             const name = escapeHtml(bill.name || '');
             const prev = isNaN(parseFloat(bill.previous)) ? '' : parseFloat(bill.previous).toLocaleString();
@@ -216,10 +216,25 @@ export default function ElectricalBillReceiptPublic() {
             const rateStr = bill.rate != null ? formatCurrency(bill.rate) + '/kWh' : '';
 
             for (let c = 0; c < (printCopies || 1); c++) {
-                bodyHtml += `...`;
+                bodyHtml += `
+                    <div class="card">
+                        <div class="header"><div style="font-size:14px;font-weight:700">JRC APARTMENT - ELECTRICAL BILL</div><div style="font-size:11px">BH System</div></div>
+                        <div class="row"><div>Name/Room:</div><div style="font-weight:600">${name}</div></div>
+                        <div class="row"><div>Date:</div><div>${bill.billDate ? new Date(bill.billDate).toLocaleDateString() : ''}</div></div>
+                        <div class="row"><div>Reading Date:</div><div>${bill.readingDate ? new Date(bill.readingDate).toLocaleDateString() : ''}</div></div>
+                        <div class="row"><div>Due Date:</div><div style="font-weight:600; color:red;">${bill.dueDate ? new Date(bill.dueDate).toLocaleDateString() : ''}</div></div>
+                        <div class="row"><div>Prev:</div><div class="prev">${prev ? prev + ' kWh' : '-'}</div></div>
+                        <div class="row"><div>Curr:</div><div class="curr">${curr ? curr + ' kWh' : '-'}</div></div>
+                        <div class="row"><div>Consumption:</div><div class="consumption">${consumption} kWh</div></div>
+                        <div class="row"><div>Rate:</div><div class="rate">${rateStr}</div></div>
+                        <div class="total"><div>TOTAL:</div><div class="total-amt">${amount}</div></div>
+                        <div class="copy-label">Copy ${c + 1}</div>
+                        <div style="text-align:center;font-size:10px;margin-top:4px;color:#666;">Generated on ${new Date().toLocaleDateString()}</div>
+                    </div>
+                `;
             }
         });
-        bodyHtml += '</div></div>';
+        bodyHtml += '</div>';
 
         // Copy current page stylesheet links into the print window so Tailwind styles apply
         const pageLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
@@ -252,8 +267,8 @@ export default function ElectricalBillReceiptPublic() {
             modal.style.background = 'transparent';
             modal.style.pointerEvents = 'none';
 
-            // Insert the #receipt element expected by print CSS
-            const containerHtml = `<div id="receipt">${bodyHtml}</div>`;
+            // Insert the #receipt element expected by print CSS, including inline styles
+            const containerHtml = headHtml + `<div id="receipt">${bodyHtml}</div>`;
             const range = document.createRange();
             range.selectNode(document.body);
             const frag = range.createContextualFragment(containerHtml);
