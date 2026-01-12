@@ -195,12 +195,12 @@ export default function ElectricalBillReceipt() {
                 .row { display:flex; justify-content:space-between; font-size:12px; margin:3px 0; }
                 .total { font-weight:800; font-size:14px; margin-top:8px; display:flex; justify-content:space-between; }
                 .copy-label { font-size:10px; text-align:right; color:#333; }
-                /* color helpers */
-                .prev { color: #6b7280; } /* gray */
-                .curr { color: #1e40af; font-weight:700; } /* blue */
-                .consumption { color: #3730a3; font-weight:800; } /* indigo */
-                .rate { color: #16a34a; font-weight:700; } /* green */
-                .total-amt { color: #b91c1c; font-weight:900; font-size:15px; } /* red */
+                /* color helpers (strengthened for print) */
+                .prev { color: #6b7280 !important; } /* gray */
+                .curr { color: #0b3d91 !important; font-weight:700 !important; } /* darker blue */
+                .consumption { color: #1e3a8a !important; font-weight:800 !important; } /* indigo */
+                .rate { color: #059669 !important; font-weight:700 !important; } /* green */
+                .total-amt { color: #b91c1c !important; font-weight:900 !important; font-size:16px !important; } /* red */
                 /* compact fit adjustments */
                 .compact .card { padding:6px; }
                 .compact .row { font-size:10px; }
