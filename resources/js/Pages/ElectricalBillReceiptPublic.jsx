@@ -221,8 +221,12 @@ export default function ElectricalBillReceiptPublic() {
         });
         bodyHtml += '</div></div>';
 
+        // Copy current page stylesheet links into the print window so Tailwind styles apply
+        const pageLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
+        const linkTags = pageLinks.map(href => `<link rel="stylesheet" href="${href}">`).join('\n');
+
         printWindow.document.open();
-        printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print Receipts</title>${styles}</head><body>${bodyHtml}</body></html>`);
+        printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print Receipts</title> ${linkTags} ${styles}</head><body>${bodyHtml}</body></html>`);
         printWindow.document.close();
         printWindow.focus();
 
