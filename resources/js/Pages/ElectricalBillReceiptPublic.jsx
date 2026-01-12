@@ -222,12 +222,12 @@ export default function ElectricalBillReceiptPublic() {
                         <div class="row"><div>Name/Room:</div><div style="font-weight:600">${name}</div></div>
                         <div class="row"><div>Date:</div><div>${bill.billDate ? new Date(bill.billDate).toLocaleDateString() : ''}</div></div>
                         <div class="row"><div>Reading Date:</div><div>${bill.readingDate ? new Date(bill.readingDate).toLocaleDateString() : ''}</div></div>
-                        <div class="row"><div>Due Date:</div><div style="font-weight:600; color:red;">${bill.dueDate ? new Date(bill.dueDate).toLocaleDateString() : ''}</div></div>
-                        <div class="row"><div>Prev:</div><div class="prev">${prev ? prev + ' kWh' : '-'}</div></div>
-                        <div class="row"><div>Curr:</div><div class="curr">${curr ? curr + ' kWh' : '-'}</div></div>
-                        <div class="row"><div>Consumption:</div><div class="consumption">${consumption} kWh</div></div>
-                        <div class="row"><div>Rate:</div><div class="rate">${rateStr}</div></div>
-                        <div class="total"><div>TOTAL:</div><div class="total-amt">${amount}</div></div>
+                        <div class="row"><div>Due Date:</div><div style="font-weight:600; color:#b91c1c !important">${bill.dueDate ? new Date(bill.dueDate).toLocaleDateString() : ''}</div></div>
+                        <div class="row"><div>Prev:</div><div class="prev" style="color:#6b7280 !important">${prev ? prev + ' kWh' : '-'}</div></div>
+                        <div class="row"><div>Curr:</div><div class="curr" style="color:#0b3d91 !important">${curr ? curr + ' kWh' : '-'}</div></div>
+                        <div class="row"><div>Consumption:</div><div class="consumption" style="color:#1e3a8a !important">${consumption} kWh</div></div>
+                        <div class="row"><div>Rate:</div><div class="rate" style="color:#059669 !important">${rateStr}</div></div>
+                        <div class="total"><div style="font-weight:800">TOTAL:</div><div class="total-amt" style="color:#b91c1c !important; font-weight:900 !important; font-size:16px !important">${amount}</div></div>
                         <div class="copy-label">Copy ${c + 1}</div>
                         <div style="text-align:center;font-size:10px;margin-top:4px;color:#666;">Generated on ${new Date().toLocaleDateString()}</div>
                     </div>
