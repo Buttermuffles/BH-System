@@ -27,7 +27,24 @@ function main(){
   }
 
   const entry = manifest[entryKey];
-  const cssLinks = (entry.css || []).map(f => `<link rel="stylesheet" href="/build/${f}" />`).join('\n');
+
+  // Collect CSS files from the entry and any imported modules (recursively)
+  function collectCssFiles(key, seen = new Set()){
+    if (!key || seen.has(key)) return [];
+    seen.add(key);
+    const m = manifest[key];
+    let files = [];
+    if (m && m.css) files = files.concat(m.css);
+    if (m && m.imports) {
+      m.imports.forEach(i => {
+        files = files.concat(collectCssFiles(i, seen));
+      });
+    }
+    return files;
+  }
+
+  const cssFiles = Array.from(new Set(collectCssFiles(entryKey)));
+  const cssLinks = cssFiles.map(f => `<link rel="stylesheet" href="/build/${f}" />`).join('\n');
   const jsScripts = [];
 
   // include the entry file and any imports (they reference other assets/have prefetched tags)
