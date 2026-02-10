@@ -1,6 +1,6 @@
 export default {
   // Basic site identity
-  name: 'Boarding House Management',
+  name: 'BILL RECEIPT SYSTEM - ELECTRICAL Calculator',
   url: typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8000',
 
   // Default SEO values (can be overridden per-page)

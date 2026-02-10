@@ -1,0 +1,33 @@
+{
+  "resources/js/Pages/ElectricalBillReceipt.jsx": {
+    "file": "assets/ElectricalBillReceipt-CwUEPezu.js",
+    "name": "ElectricalBillReceipt",
+    "src": "resources/js/Pages/ElectricalBillReceipt.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "resources/js/Pages/ElectricalBillReceiptPublic.jsx": {
+    "file": "assets/ElectricalBillReceiptPublic-DZ44tvMZ.js",
+    "name": "ElectricalBillReceiptPublic",
+    "src": "resources/js/Pages/ElectricalBillReceiptPublic.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "resources/js/app.jsx": {
+    "file": "assets/app-BdaZ0108.js",
+    "name": "app",
+    "src": "resources/js/app.jsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/Pages/ElectricalBillReceipt.jsx",
+      "resources/js/Pages/ElectricalBillReceiptPublic.jsx"
+    ],
+    "css": [
+      "assets/app-B9I_mRIe.css"
+    ]
+  }
+}

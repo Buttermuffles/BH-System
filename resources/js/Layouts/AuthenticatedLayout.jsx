@@ -39,96 +39,9 @@ export default function AuthenticatedLayout({ header, children }) {
         </Link>
       </div>
 
-      {/* Center: Navigation Links */}
-      <div className="hidden md:flex items-center justify-center space-x-6">
-        <NavLink
-          href={route('tenants.index')}
-          active={route().current('tenants.index')}
-          className="text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2 transition"
-        >
-          Tenant
-        </NavLink>
 
-        <NavLink
-          href={route('ocr.demo')}
-          active={route().current('ocr.demo')}
-          className="text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2 transition"
-        >
-          OCR
-        </NavLink>
-        <NavLink
-          href={route('electrical.bill.receipt')}
-          active={route().current('electrical.bill.receipt')}
-          className="text-white/90 hover:text-white hover:bg-white/10 rounded-lg px-3 py-2 transition"
-        >
-          E-Bill
-        </NavLink>
-      </div>
 
-      {/* Right: Actions + User */}
-      <div className="flex items-center justify-end space-x-4">
-        {/* Quick actions */}
-        <div className="hidden md:flex items-center space-x-2">
-          <Link
-            href={route('map')}
-            className="inline-flex items-center rounded-lg bg-white/15 px-3 py-2 text-sm font-medium text-white hover:bg-white/25 focus:ring-2 focus:ring-white/40 transition duration-200"
-          >
-            🗺️ Room Map
-          </Link>
-          <Link
-            href={route('dashboard')}
-            className="inline-flex items-center rounded-lg bg-white/15 px-3 py-2 text-sm font-medium text-white hover:bg-white/25 focus:ring-2 focus:ring-white/40 transition duration-200"
-          >
-            📊 Overview
-          </Link>
-        </div>
 
-        {/* User */}
-        {hasAuth ? (
-          <div className="relative">
-            <Dropdown>
-              <Dropdown.Trigger>
-                <button className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 transition">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white font-semibold text-sm">
-                    {initials(user.name)}
-                  </span>
-                  <span className="hidden sm:inline">{user.name}</span>
-                </button>
-              </Dropdown.Trigger>
-
-              <Dropdown.Content>
-                <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                <Dropdown.Link href={route('logout')} method="post" as="button">
-                  Log Out
-                </Dropdown.Link>
-              </Dropdown.Content>
-            </Dropdown>
-          </div>
-        ) : (
-          <Link
-            href={route('login')}
-            className="inline-flex items-center rounded-lg bg-white/10 px-3 py-2 text-sm font-medium text-white hover:bg-white/20 focus:ring-2 focus:ring-white/30 transition"
-          >
-            Sign in
-          </Link>
-        )}
-
-        {/* Mobile menu button */}
-        <div className="-mr-2 flex md:hidden">
-          <button
-            onClick={() => setShowMobileNav((s) => !s)}
-            className="inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
-          >
-            <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-              {showMobileNav ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -181,33 +94,6 @@ export default function AuthenticatedLayout({ header, children }) {
     </div>
   )}
 </nav>
-
-
-            {header && (
-                <header className="bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 shadow-lg border-b border-indigo-800">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 relative overflow-hidden">
-                        {/* Decorative background glow */}
-                        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/5 blur-3xl pointer-events-none" />
-                        <div className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-white/3 blur-2xl pointer-events-none" />
-                        <div className="relative z-10 flex items-center justify-between" style={{ color: '#ffffff' }}>
-                            <div className="flex-1">
-                                {/* Force white text for header and override any child text color utilities */}
-                                <div className="!text-white font-semibold drop-shadow-sm">
-                                    {header}
-                                </div>
-                            </div>
-                            <div className="hidden md:block ml-6">
-                                <img
-                                    src={site.leftPanel.image}
-                                    alt={site.leftPanel.imageAlt}
-                                    className="h-12 w-12 opacity-90 hover:opacity-100 transition"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </header>
-            )}
-
             <main>{children}</main>
         </div>
     );
